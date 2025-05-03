@@ -18,7 +18,7 @@ export default function AddProductModal() {
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
 
-  const API_ENDPOINT = "http://localhost:1122/api/cars/addcar";
+  const API_ENDPOINT = "https://backenrent.vercel.app/api/cars/addcar";
 
   // Set loading to false once component is mounted
   useEffect(() => {

@@ -17,7 +17,7 @@ export default function AddScooter() {
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
 
-  const API_ENDPOINT = "http://localhost:1122/api/scooter/addscooter";
+  const API_ENDPOINT = "https://backenrent.vercel.app/api/scooter/addscooter";
 
   useEffect(() => {
     const timer = setTimeout(() => {
