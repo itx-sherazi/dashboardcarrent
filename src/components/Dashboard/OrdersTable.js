@@ -9,6 +9,7 @@ import {
   Home,
   Phone,
   Clock,
+  ShoppingBag,
 } from "lucide-react";
 import { fetchOrders, deleteBooking } from "../../services/api"; // Yeh aapka API function hai jo sare orders fetch karega
 
@@ -32,6 +33,7 @@ export default function OrdersDashboardView() {
 
     loadOrders();
   }, []);
+  
   const handleDelete = async (id) => {
     try {
       await deleteBooking(id);
@@ -58,11 +60,34 @@ export default function OrdersDashboardView() {
       .join(" ");
   };
 
-  if (loading) return <div>Loading orders...</div>;
-  if (error) return <div>Error loading orders: {error}</div>;
+  // Custom Gold Loading Spinner
+  const GoldLoader = () => (
+    <div className="flex flex-col justify-center items-center h-screen w-full">
+      <div className="relative">
+        <div className="w-16 h-16 border-4 border-yellow-100 rounded-full"></div>
+        <div className="absolute top-0 left-0 w-16 h-16 border-4 border-t-yellow-400 border-r-yellow-400 rounded-full animate-spin"></div>
+      </div>
+      <p className="mt-4 text-yellow-600 font-medium">Loading orders...</p>
+    </div>
+  );
+
+  // No Orders Available Component
+  const NoOrders = () => (
+    <div className="flex flex-col items-center justify-center h-64 bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+      <ShoppingBag size={64} className="text-gray-300 mb-4" />
+      <h2 className="text-2xl font-bold text-gray-500">No Orders Available</h2>
+      <p className="text-gray-400 mt-2">There are currently no bookings in the system</p>
+    </div>
+  );
+
+  if (loading) return <GoldLoader />;
+  if (error) return <div className="text-center text-red-500 p-4">Error loading orders: {error}</div>;
+  if (orders.length === 0) return <NoOrders />;
 
   return (
     <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-center text-gray-800 my-6">Orders Dashboard</h1>
+      
       {orders.map((orderData, index) => (
         <div
           key={orderData._id?.$oid || index}
@@ -70,23 +95,22 @@ export default function OrdersDashboardView() {
         >
           {/* Order Header */}
           <div className="border-b pb-4 mb-6">
-  <h1 className="text-2xl font-bold text-gray-800">Order Details</h1>
-  <div className="flex items-center justify-between">
-    <p className="text-gray-500">
-      Order Name:{" "}
-      <span className="font-bold">{orderData?.carName}</span>
-    </p>
-    <p className="text-gray-500 flex items-center">
-      Order Image:{" "}
-      <img
-        src={orderData?.carImage}
-        alt="Order Image"
-        className="w-24 h-24 object-cover ml-2"
-      />
-    </p>
-  </div>
-</div>
-
+            <h2 className="text-2xl font-bold text-gray-800">Order Details</h2>
+            <div className="flex items-center justify-between">
+              <p className="text-gray-500">
+                Order Name:{" "}
+                <span className="font-bold">{orderData?.carName}</span>
+              </p>
+              <p className="text-gray-500 flex items-center">
+                Order Image:{" "}
+                <img
+                  src={orderData?.carImage}
+                  alt="Order Image"
+                  className="w-24 h-24 object-cover ml-2"
+                />
+              </p>
+            </div>
+          </div>
 
           {/* Customer and Rental Info */}
           <div className="grid md:grid-cols-2 gap-6">
@@ -235,7 +259,7 @@ export default function OrdersDashboardView() {
 
             <button
               onClick={() => handleDelete(orderData._id)}
-              className="bg-red-600 cursor-pointer hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium"
+              className="bg-red-600 cursor-pointer hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition duration-300"
             >
               Delete Order
             </button>
