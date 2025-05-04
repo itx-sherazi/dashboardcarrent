@@ -10,6 +10,7 @@ export default function CarsTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentCar, setCurrentCar] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -100,7 +101,7 @@ export default function CarsTable() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     try {
       // Create FormData for multipart/form-data (for image upload)
       const formDataToSend = new FormData();
@@ -114,7 +115,7 @@ export default function CarsTable() {
 
       // Append image if selected
       if (selectedImage) {
-        formDataToSend.append("image", selectedImage);
+        formDataToSend.append("imageUrl", selectedImage);
       }
 
       // Send update request
@@ -135,6 +136,8 @@ export default function CarsTable() {
     } catch (err) {
       toast.error("Failed to update car");
       console.error("Update error:", err);
+    }finally{
+      setIsSubmitting(false);
     }
   };
 
@@ -207,12 +210,12 @@ export default function CarsTable() {
                     {car.fuel}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {/* <button
+                    <button
                       onClick={() => handleEditClick(car)}
                       className="text-blue-500 hover:text-blue-700 mr-3"
                     >
                       <Edit size={18} />
-                    </button> */}
+                    </button>
                     <button
                       onClick={() => handleDelete(car._id)}
                       className="text-red-500 hover:text-red-700"
@@ -233,151 +236,202 @@ export default function CarsTable() {
         </table>
       </div>
 
-     {/* Edit Car Modal */}
-{isModalOpen && (
-  <div className="fixed inset-0 bg-black/10 bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Edit Car Details</h2>
-        <button
-          onClick={() => setIsModalOpen(false)}
-          className="text-gray-500 hover:text-gray-700 tex-5xl"
-        >
-          &times;
-        </button>
-      </div>
+      {/* Edit Car Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/10 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Edit Car Details</h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700 tex-5xl"
+              >
+                &times;
+              </button>
+            </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
-            Category
-          </label>
-          <input
-            type="text"
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="seat">
-            Seats
-          </label>
-          <input
-            type="number"
-            id="seat"
-            name="seat"
-            value={formData.seat}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="year">
-            Year
-          </label>
-          <input
-            type="number"
-            id="year"
-            name="year"
-            value={formData.year}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="speed">
-            Speed
-          </label>
-          <input
-            type="text"
-            id="speed"
-            name="speed"
-            value={formData.speed}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fuel">
-            Fuel
-          </label>
-          <input
-            type="text"
-            id="fuel"
-            name="fuel"
-            value={formData.fuel}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="mb-6 sm:col-span-2">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
-            Image
-          </label>
-          <div className="flex items-center space-x-4">
-            {imagePreview && (
-              <div className="relative">
-                <img
-                  src={imagePreview}
-                  alt="Car preview"
-                  className="w-24 h-16 object-cover rounded"
+            <form
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+            >
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="name"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  required
                 />
               </div>
-            )}
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
+
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="category"
+                >
+                  Category
+                </label>
+                <input
+                  type="text"
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="seat"
+                >
+                  Seats
+                </label>
+                <input
+                  type="number"
+                  id="seat"
+                  name="seat"
+                  value={formData.seat}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="year"
+                >
+                  Year
+                </label>
+                <input
+                  type="number"
+                  id="year"
+                  name="year"
+                  value={formData.year}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="speed"
+                >
+                  Speed
+                </label>
+                <input
+                  type="text"
+                  id="speed"
+                  name="speed"
+                  value={formData.speed}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="fuel"
+                >
+                  Fuel
+                </label>
+                <input
+                  type="text"
+                  id="fuel"
+                  name="fuel"
+                  value={formData.fuel}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div className="mb-6 sm:col-span-2">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="image"
+                >
+                  Image
+                </label>
+                <div className="flex items-center space-x-4">
+                  {imagePreview && (
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Car preview"
+                        className="w-24 h-16 object-cover rounded"
+                      />
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 sm:col-span-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Updating...
+                    </>
+                  ) : (
+                    "Update Scooter"
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-
-        <div className="flex justify-end space-x-3 sm:col-span-2">
-          <button
-            type="button"
-            onClick={() => setIsModalOpen(false)}
-            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Update Car
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
+      )}
 
       <Toaster position="top-right" />
     </div>

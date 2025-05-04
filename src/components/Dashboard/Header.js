@@ -24,10 +24,10 @@ export default function Header({ sidebarOpen, toggleSidebar }) {
               AD
             </div>
             <div className="hidden md:block">
-              <p className="text-sm font-medium">Admin User</p>
-              <p className="text-xs text-gray-500">admin@goldride.com</p>
+              <p className="text-sm font-medium">Admin</p>
+              <p className="text-xs text-gray-500">narenos.cars@gmail.com</p>
             </div>
-            <ChevronDown size={16} className="text-gray-500" />
+            {/* <ChevronDown size={16} className="text-gray-500" /> */}
           </div>
         </div>
       </div>

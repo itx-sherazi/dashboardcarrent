@@ -5,7 +5,7 @@ export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, toggleSi
   return (
     <div className={`${sidebarOpen ? 'w-64' : 'w-20'} transition-all duration-300 bg-black text-white flex flex-col`}>
       <div className="flex items-center justify-between p-4">
-        <h1 className={`text-xl font-bold text-gold-400 ${!sidebarOpen && 'hidden'}`}>GoldRide</h1>
+        <h1 className={`text-xl font-bold text-gold-400 ${!sidebarOpen && 'hidden'}`}>Narenos Company</h1>
         <button onClick={toggleSidebar} className="text-white">
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

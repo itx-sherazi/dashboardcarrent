@@ -1,5 +1,6 @@
 
 const API_BASE_URL = 'https://backenrent.vercel.app/api';
+// const API_BASE_URL = 'http://localhost:1122/api';
 import axios from 'axios';
 
 export const fetchDashboardData = async () => {
