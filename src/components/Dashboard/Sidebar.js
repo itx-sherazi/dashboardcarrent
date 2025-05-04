@@ -27,13 +27,13 @@ export default function Sidebar({ activeTab, setActiveTab, sidebarOpen, toggleSi
           <Car size={20} />
           {sidebarOpen && <span className="ml-3">Cars</span>}
         </button>
-        <button 
+        {/* <button 
           className={`flex items-center p-4 ${activeTab === 'scooter' ? 'bg-gold-400 text-white' : 'text-white hover:bg-gray-800'}`} 
           onClick={() => setActiveTab('scooter')}
         >
           <RiMotorbikeFill size={20} />
           {sidebarOpen && <span className="ml-3">Scooters</span>}
-        </button>
+        </button> */}
         
         <button 
           className={`flex items-center p-4 ${activeTab === 'users' ? 'bg-gold-400 text-white' : 'text-white hover:bg-gray-800'}`}

@@ -13,7 +13,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { RiMotorbikeFill } from "react-icons/ri"; 
+import { RiMotorbikeFill } from "react-icons/ri";
 
 export default function Overview() {
   const [stats, setStats] = useState({
@@ -21,7 +21,7 @@ export default function Overview() {
     totalUsers: 0,
     revenue: 0,
     availableCars: 0,
-    totalScooters: 0 // 👈 added here too
+    totalScooters: 0, // 👈 added here too
   });
 
   const [loading, setLoading] = useState(true);
@@ -64,7 +64,7 @@ export default function Overview() {
         const usersData = await usersResponse.json();
         const totalUsers = usersData?.users?.length || 0;
         // Scooters API Call
-        const scooterResponse = await fetch(`${API_BASE_URL}/scooter/all`);
+        const scooterResponse = await fetch(`${API_BASE_URL}/AllBook`);
         if (!scooterResponse.ok) throw new Error("Failed to fetch scooters");
         const scooterData = await scooterResponse.json();
         const totalScooters = scooterData.length;
@@ -83,7 +83,7 @@ export default function Overview() {
           totalCars,
           totalUsers,
           availableCars,
-          totalScooters // 👈 new value added
+          totalScooters, // 👈 new value added
         });
 
         setCarTypesData(carTypesChartData);
@@ -151,19 +151,20 @@ export default function Overview() {
             </div>
           </div>
         </div>
-{/* Total Scooters Card */}
-<div className="bg-white rounded-lg shadow p-6 border-t-4 border-yellow-500 hover:shadow-md transition-shadow">
-  <div className="flex items-center">
-    <div className="bg-yellow-100 p-3 rounded-lg">
-      <RiMotorbikeFill size={24} className="text-yellow-500" />
-    </div>
-    <div className="ml-4">
-      <h3 className="text-sm text-gray-500 font-medium">Total Scooters</h3>
-      <p className="text-2xl font-bold">{stats.totalScooters}</p>
-    </div>
-  </div>
-</div>
-
+        {/* Total Scooters Card */}
+        <div className="bg-white rounded-lg shadow p-6 border-t-4 border-yellow-500 hover:shadow-md transition-shadow">
+          <div className="flex items-center">
+            <div className="bg-yellow-100 p-3 rounded-lg">
+              <RiMotorbikeFill size={24} className="text-yellow-500" />
+            </div>
+            <div className="ml-4">
+              <h3 className="text-sm text-gray-500 font-medium">
+                Total Booking
+              </h3>
+              <p className="text-2xl font-bold">{stats.totalScooters}</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Charts Section */}
