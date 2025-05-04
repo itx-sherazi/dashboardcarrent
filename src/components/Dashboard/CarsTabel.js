@@ -329,7 +329,7 @@ export default function CarsTable() {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="speed"
                 >
-                  Speed
+           Transmission 
                 </label>
                 <input
                   type="text"
