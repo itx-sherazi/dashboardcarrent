@@ -219,6 +219,7 @@ export default function AddProductModal() {
                   <option value="SUV">SUV</option>
                   <option value="Hatchback">Hatchback</option>
                   <option value="City">City</option>
+                  <option value="Family">Family</option>
                 </select>
               </div>
 
